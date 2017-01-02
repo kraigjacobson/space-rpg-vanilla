@@ -1,0 +1,1448 @@
+<!--todo: cookies for saving game-->
+<!--todo: ui cleanup-->
+<!--stop for the night backgrounds-->
+<!--slots with item images-->
+<!--stats-->
+<!--monster images-->
+<!--tooltip with more info-->
+<!--todo: adventure-->
+<!--todo:explorable locations-->
+<!--space stations-->
+<!--small outposts-->
+<!--planet colonies-->
+<!--todo:mayhem-->
+<!--marooned on planet-->
+<!--parts of ship fail-->
+<!--todo: needs: food water sleep-->
+<!--punish stats when low-->
+<!--todo: equipment/items-->
+<!--combine magic item ability enhancers-->
+<!--add tooltips for more info-->
+<!--compare currently equipped-->
+<!--todo: merchant-->
+<!--quantities for merchant and inventory-->
+<!--always carry food/drink/medical-->
+<!--sort items by category-->
+<!--todo: player stuff-->
+<!--todo: add charisma-->
+<!--increase amount gained when selling to merchant-->
+<!--decrease amount spent when buying from merchant-->
+<!--different speaking options?-->
+<!--todo: add luck-->
+<!--better chance of money items-->
+<!--less chance of mob attacks-->
+<!--crit percentage-->
+<!--levelup sort out bonuses (str,dex,wis)-->
+<!--skillups-->
+<!--adds buttons for combat or passive stuff-->
+<!--point buy/character customization-->
+<!--add leaderboards-->
+<!--add trophies-->
+<!--add stats-->
+<!--todo: enemies-->
+<!--monster images/pluralization-->
+<!--enemy weaknesses/strengths-->
+<!--todo: combat-->
+<!--todo: ship to ship combat-->
+<!--todo: ship upgrades-->
+<!--shields-->
+<!--weapons-->
+<!--todo: magic/int utilization-->
+
+
+
+<!doctype html>
+<html class="no-js" lang="">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="x-ua-compatible" content="ie=edge">
+        <title>Space RPG | Version 1.1</title>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        <link rel="apple-touch-icon" href="apple-touch-icon.png">
+        <!-- Place favicon.ico in the root directory -->
+
+        <!--<link rel="stylesheet" href="css/main.css">-->
+        <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+        <link href="https://fonts.googleapis.com/css?family=Share+Tech+Mono|Titillium+Web" rel="stylesheet">
+        <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon">
+        <link rel="icon" href="/favicon.ico" type="image/x-icon">
+        <style>
+            body {
+                font-family: 'Titillium Web', sans-serif;
+                background-position: 0 0;
+            }
+            .headfootpad {
+                margin-top:20px;
+                margin-bottom:30px;
+            }
+            .info-label {
+                padding: 5px 20px;
+                margin:0 0 5px;
+                min-height:32px;
+            }
+            .btn {
+                margin:0 0 5px;
+                width:100%;
+            }
+            .redtext {
+                color:red;
+            }
+            .Junk {
+                color:lightgrey;
+            }
+            .Common {
+                color:darkolivegreen;
+            }
+            .Uncommon {
+                color:aqua;
+            }
+            .Rare {
+                color:deepskyblue;
+            }
+            .Epic {
+                color:blueviolet;
+            }
+            .Legendary {
+                color:hotpink;
+            }
+            .merchant-button {
+                color: dodgerblue;
+            }
+            .merchant-button:hover {
+                color: red;
+                cursor: pointer;
+                color:white;
+            }
+            .encounter{
+                display:none;
+            }
+            .merchant{
+                display:none;
+                font-size:14px;
+                padding:0;
+            }
+            .progress {
+                margin-bottom:5px;
+            }
+            .left {
+                margin:0 0 15px;
+            }
+            .stat {
+                float:right;
+            }
+            .stats {
+                background-color: white;
+                opacity:.5;
+                padding:15px;
+                -webkit-border-radius:7px;
+                -moz-border-radius:7px;
+                border-radius:7px;
+            }
+
+            label {
+                padding:5px;
+                color: black;
+                background-color: white;
+                opacity:.7;
+                cursor: pointer;
+            }
+            .statrow {
+                clear:both;
+            }
+            #journal {
+                height:300px;
+                overflow: hidden;
+            }
+            .screen {
+                overflow:hidden;
+                background-color: black;
+                color: greenyellow;
+                font-family: 'Share Tech Mono', monospace;
+                -webkit-border-radius:7px;
+                -moz-border-radius:7px;
+                border-radius:7px;
+                font-size:13px;
+                padding:15px;
+                border: 2px solid grey;
+                -webkit-border-radius:7px;
+                -moz-border-radius:7px;
+                border-radius:7px;
+            }
+            .information,.actions,#target-name-box {
+                padding:0;
+            }
+            #target-name {
+                color: white;
+                margin:5px 0;
+                width:100%;
+                text-align: center;
+                font-size:16px;
+            }
+            .btn-primary {
+                background-color: #555555;
+                border:1px solid grey;
+            }
+            .btn-primary:hover {
+                background-color: darkred;
+                border:1px solid white;
+            }
+            .progress-bar-success {
+                background-color: limegreen;
+            }
+            .progress-bar-warning {
+                background-color: gold;
+            }
+            .progress-bar-danger {
+                background-color: darkred;
+            }
+            .progress-bar-success .bar-label {
+                color:white;
+            }
+            .progress-bar-danger .bar-label {
+                color:white;
+            }
+            .bar-label {
+                color:black;
+            }
+            #target-image, #merchant-image, #merchant-name {
+                text-align: center;
+                background-color: transparent;
+                color:white;
+            }
+            #target-image img, #merchant-image img {
+                width:100%;
+                border: 2px solid grey;
+                border-radius: 7px;
+            }
+            .actions-encounters {
+                margin-top:15px;
+            }
+            #store-contents {
+                margin-top:-15px;
+            }
+            #quick-info {
+                color: black;
+                background-color: white;
+                opacity: .7;
+                padding: 7px;
+                margin-bottom:10px;
+            }
+            #death {
+                position: relative;
+            }
+
+        </style>
+    </head>
+    <body>
+        <!--[if lt IE 8]>
+            <p class="browserupgrade">Why are you using such an old browser! Stop it!</p>
+        <![endif]-->
+
+        <div class="container headfootpad">
+            <div class="col-sm-6 col-sm-12 player-stats">
+                <div class="left">
+                    <div class="bars">
+                        <div class="progress">
+                            <div id="myhp-bar" class="progress-bar" role="progressbar" aria-valuenow="70" aria-valuemin="0" aria-valuemax="100">
+                                <span class="bar-label">My HP</span>
+                            </div>
+                        </div>
+                        <div class="progress">
+                            <div id="food-bar" class="progress-bar" role="progressbar" aria-valuenow="70" aria-valuemin="0" aria-valuemax="100">
+                                <span class="bar-label">Food</span>
+                            </div>
+                        </div>
+                        <div class="progress">
+                            <div id="drink-bar" class="progress-bar" role="progressbar" aria-valuenow="70" aria-valuemin="0" aria-valuemax="100">
+                                <span class="bar-label">Drink</span>
+                            </div>
+                        </div>
+                        <div class="progress">
+                            <div id="sleep-bar" class="progress-bar" role="progressbar" aria-valuenow="70" aria-valuemin="0" aria-valuemax="100">
+                                <span class="bar-label">Sleep</span>
+                            </div>
+                        </div>
+                        <div class="progress">
+                            <div id="dist-bar" class="progress-bar" role="progressbar" aria-valuenow="70" aria-valuemin="0" aria-valuemax="0">
+                                <span class="bar-label">Distance to Destination</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="actions-encounters">
+                        <div class="col-sm-6 actions">
+                            <!--only appears on encounter-->
+                            <div class="col-sm-12 row">
+                                <div id="attack" class="btn btn-primary encounter">Attack</div>
+                            </div>
+                            <div class="col-sm-12 row">
+                                <!--only appears on encounter-->
+                                <div id="run" class="btn btn-primary encounter">Run Away</div>
+                            </div>
+                            <!--only appears outside of encounters-->
+                            <div class="col-sm-12 row">
+                                <!--roll die for outcome, gain miles (random)-->
+                                <div id="continue" class="btn btn-primary">Continue On</div>
+                            </div>
+                            <div class="col-sm-12 row">
+                                <!--roll die for outcome, don't gain miles-->
+                                <div id="camp" class="btn btn-primary">Stop for the night</div>
+                            </div>
+                            <div class="col-sm-12 row">
+                                <!--roll die for outcome, gain miles (random)-->
+                                <div id="market" class="btn btn-primary">Market</div>
+                            </div>
+                            <div class="clearfix"></div>
+                            <div class="col-sm-8" id="quick-info">
+                                <div class="statrow">Credits:<div class="stat player-credits">0</div></div>
+                            </div>
+                        </div>
+                        <div class="col-sm-6 row merchant">
+                            <div id="merchant-image" class="img-responsive"></div>
+                            <div id="merchant-name" class="info-label"></div>
+                        </div>
+                        <div class="col-sm-6 row encounter" id="target-name-box">
+                            <!--only appears on encounter-->
+                            <div id="target-image" class="img-responsive"></div>
+                            <div id="target-name" class="info-label"></div><div class="progress encounter">
+                            <div id="targethp-bar" class="progress-bar" role="progressbar" aria-valuenow="70" aria-valuemin="0" aria-valuemax="100">
+                                <span class="bar-label">Enemy HP</span>
+                            </div>
+                        </div>
+                        </div>
+
+                    </div>
+                    <div class="clearfix"></div>
+                </div>
+                <div class="merchant col-sm-12">
+                    <div id="store-contents" class="info-label screen"></div>
+                </div>
+                    </div>
+
+            <div class="col-sm-6 information">
+                <div class="col-sm-12">
+                    <label id="journal-tab" for="journal">Journal</label>
+                    <label id="inventory-tab" for="inventory-contents">Inventory</label>
+                    <label id="equipment-tab" for="equipment-contents">Equipment</label>
+                    <label id="stats-tab" for="equipment-contents">Stats</label>
+                    <div id="journal" class="info-label screen"></div>
+                </div>
+                <div class="col-sm-12">
+                    <div id="inventory-contents" class="info-label screen"></div>
+                </div>
+                <div class="col-sm-12">
+                    <div id="equipment-contents" class="info-label screen"></div>
+                </div>
+                <div class="col-sm-12">
+                    <div id="stats-contents" class="info-label screen">
+                        <div class="clearfix"></div>
+                            <div class="col-xs-6 row">
+                                <div class="statrow">Name:<div id="player-name" class="stat"></div></div>
+                                <div class="statrow">Level:<div id="player-level" class="stat"></div></div>
+                                <div class="statrow">Race:<div id="player-race" class="stat"></div></div>
+                                <div class="statrow">Class:<div id="player-class" class="stat"></div></div>
+                                <div class="statrow">HP:<div id="player-hp" class="stat"></div></div>
+                                <div class="statrow">AC:<div id="player-ac" class="stat"></div></div>
+                                <div class="statrow">Credits:<div class="stat player-credits">0</div></div>
+                                <div class="statrow">Weight:<div id="player-weight" class="stat">0</div></div>
+                                <div class="statrow">Exp:<div id="player-exp" class="stat">0</div></div>
+                                <div class="statrow">Distance Left:<div id="player-dist" class="stat"></div></div>
+                            </div>
+                            <div class="col-xs-6">
+                                <div class="statrow">Weapon:<div id="player-weapon" class="stat"></div></div>
+                                <div class="statrow">Str:<div id="player-str" class="stat"></div></div>
+                                <div class="statrow">Con:<div id="player-con" class="stat"></div></div>
+                                <div class="statrow">Dex:<div id="player-dex" class="stat"></div></div>
+                                <div class="statrow">Int:<div id="player-int" class="stat"></div></div>
+                            </div>
+                    <div class="clearfix"></div>
+                </div>
+                </div>
+            </div>
+        </div>
+
+
+        <script src="https://code.jquery.com/jquery-3.1.1.js"></script>
+        <!--<script src="js/main.js"></script>-->
+        <script>
+//            fvar
+            var char = {};
+            var target = {};
+            var inventory = [];
+            var equipment = [];
+            var store = [];
+            const distToDestination = 50001;
+            var traveled = 1;
+            var dist = {name:"dist",value:0};
+            var food = {name:"food",value:100}, drink = {name:"drink",value:100}, sleep = {name:"sleep",value:100};
+            var myhp = {name:"myhp",value:"100"};
+            var targethp = {name:"targethp"};
+            var expRequirements = 100;
+            var weaponType = ["Ranged","Melee"];
+            var meleeWeaponSubtype = [
+                {subtype:"Sword",weight:5,attack:5,speed:5,value:10},
+                {subtype:"Baton",weight:3,attack:4,speed:4,value:10},
+                {subtype:"Dagger",weight:2,attack:3,speed:3,value:10}
+            ];
+            var rangedWeaponSubtype = [
+                {subtype:"Cannon",weight:10,attack:5,speed:5,value:10},
+                {subtype:"Rifle",weight:5,attack:4,speed:4,value:10},
+                {subtype:"Pistol",weight:2,attack:3,speed:3,value:10}
+            ];
+            var rangedWeaponPower = ["Ionic","Plasma","Pulse"];
+            var meleeWeaponPower = ["Sonic","Plasma","Beam","Toxic","Super-Heated"];
+            var apparelSubtype = ["Head","Chest","Hands","Feet","Waist"];
+            var apparelMaterial = ["Duralumin","Carbon","Moscovium","Neutronium","Polonium","Rhodium","Selenium"];
+            var headItem = [{name:"Hood",weight:2,value:5},{name:"Circlet",weight:1,value:8}];
+            var chestItem = [{name:"Robes",weight:10,value:10},{name:"Vest",weight:5,value:5},{name:"Shirt",weight:4,value:5}];
+            var handsItem = [{name:"Gloves",weight:1,value:3}];
+            var feetItem = [{name:"Shoes",weight:3,value:5},{name:"Boots",weight:5,value:7}];
+            var waistItem = [{name:"Sash",weight:1,value:4},{name:"Belt",weight:2,value:2},{name:"Bandolier",weight:-2,value:6}];
+            var junkCondition = ["Bent","Cracked","Drained","Dented","Old"];
+            var junkItem = [
+                {name:"Ionic Battery",weight:3,value:1},
+                {name:"Ionizing Deozonator",weight:2,value:1},
+                {name:"Quantum Stabilizer",weight:4,value:1},
+                {name:"Thermoglasses",weight:3,value:1},
+                {name:"Heat Sync",weight:4,value:1},
+                {name:"Fission Decoupler",weight:3,value:1}
+            ];
+            var foodItem = [
+                {name:"Akrennian Beetle Sashimi",type:"food",weight:1,value:10},
+                {name:"Relenian Blood Wine",type:"drink",weight:1,value:4},
+                {name:"Squild Grubs",type:"food",weight:1,value:8},
+                {name:"Kep-mok Blood Ticks",type:"food",weight:1,value:12},
+                {name:"Weemil Moon Juice",type:"drink",weight:1,value:8},
+                {name:"Dehydrated Water",type:"drink",value:10,weight:2},
+                {name:"Military Ration",type:"food",value:10,weight:2}
+            ];
+            var itemItem = [
+                {name:"Proximity Mine",type:"offensive",value:10,weight:2},
+                {name:"Med Kit",type:"defensive",value:15,weight:2},
+                {name:"Med Kit",type:"defensive",value:20,weight:2},
+                {name:"Poison Gas Bomb",type:"offensive",value:10,weight:2}];
+            var bonuses = ["HP","AC","STR","DEX","INT"];
+            //            add more monsters (maybe categories with different random weights/chance of a group)
+            var targets = [
+                {name:'pirate',type:"humanoid",img:"assets/images/enemies/pirate.jpg"},
+                {name:'space sludge',type:"monster",img:"assets/images/enemies/slime.jpg"},
+                {name:'bandit',type:"humanoid",img:"assets/images/enemies/bandit.jpg"},
+                {name:'cultist',type:"humanoid",img:"assets/images/enemies/cultist.jpg"},
+                {name:'oclethorpe',type:"monster",img:"assets/images/enemies/oclethorpe.jpg"},
+                {name:'shazari warrior',type:"humanoid",img:"assets/images/enemies/shazari-warrior.jpg"}
+            ];
+            var treasureLocations = ["You come across a wrecked ship","You check out a makeshift hut"];
+
+
+
+            $( document ).ready(function() {
+
+                newChar();
+//                get supplies
+                typeText("You need to get halfway across the galaxy. Go ahead and buy some supplies. If you have the credits...");
+                refreshAllNeeds();
+//                fbuttons
+                $("#attack").on("click",function(){
+                    if (target.hp <= 0) {
+                        typeText(target.name+" is dead. Continue on.");
+                    } else {
+                        attackAttempt();
+                    }
+                });
+                $("#run").on("click",function(){
+                    if(rollDie(3)===1) {
+                        monsterAttack();
+                        typeText("You manage to get away but the enemy was able to get another attack in!");
+                    } else {
+                        typeText("You manage to get away safely without harm.");
+                    }
+                    hideMerchant();
+                    food.value -= 1;
+                    drink.value -= 1;
+                    sleep.value -= 1;
+                    refreshAllNeeds();
+                    if (food.value <= 0 || drink.value <= 0 || sleep.value <= 0) {
+                        checkNeeds();
+                    } else {
+                        $(".encounter").hide();
+                        $("#continue").show();
+                        $("#camp").show();
+                    }
+                });
+                var spaceImages = ["assets/images/spacebg1.jpg"];
+                $("#continue").on("click",function(){
+                    $(".encounter").hide();
+                    $("body").css("background-image","url("+ randomFromArray(spaceImages) +")");
+                    $("#market").hide();
+                    hideMerchant();
+                    food.value -= 1;
+                    drink.value -= 1;
+                    sleep.value -= 1;
+                    refreshAllNeeds();
+                    if (food.value <= 0 || drink.value <= 0 || sleep.value <= 0) {
+                        checkNeeds();
+                    } else {
+                        refreshInventory();
+                        randomEvent();
+                        refreshBar("dist");
+                    }
+                });
+                $("#camp").on("click",function(){
+                    hideMerchant();
+                    $(".encounter").hide();
+                    food.value -= 5;
+                    drink.value -= 5;
+                    if (rollDie(3)==1) {
+                        sleep.value = 50;
+                        typeText("Your sleep is cut short by an attack!");
+//                        force an encounter
+                        randomEvent(5);
+                    } else if (rollDie(3)==2) {
+                        $("body").css("background-image","url('assets/images/bed.jpg')");
+                        sleep.value = 100;
+                        gainHP(.35);
+                        typeText("You sleep through the night waking up refreshed!");
+                    } else {
+                        $("body").css("background-image","url('assets/images/bed.jpg')");
+                        sleep.value = 75;
+                        gainHP(.2);
+//                        make array for random stuff to keep player up
+                        typeText("You are groggy from being kept up most the night by strange noises..");
+                    }
+                    refreshAllNeeds();
+                    if (food.value <= 0 || drink.value <= 0 || sleep.value <= 0) {
+                        checkNeeds();
+                    } else {
+                        refreshInventory();
+                    }
+                });
+                $("#market").on("click",function(){
+                    if ($(".merchant").is(":hidden")) {
+                        generateMerchant(rollDie(20,10));
+                    }
+                });
+                $("#journal-tab").on("click",function(){
+                    $("#journal").show();
+                    $("#inventory-contents").hide();
+                    $("#equipment-contents").hide();
+                    $("#stats-contents").hide();
+                    $("#journal-tab").css("background-color","cornflowerblue");
+                    $("#inventory-tab").css("background-color","white");
+                    $("#equipment-tab").css("background-color","white");
+                    $("#stats-tab").css("background-color","white");
+                });
+                $("#inventory-tab").on("click",function(){
+                    $("#journal").hide();
+                    $("#inventory-contents").show();
+                    $("#equipment-contents").hide();
+                    $("#stats-contents").hide();
+                    $("#journal-tab").css("background-color","white");
+                    $("#inventory-tab").css("background-color","cornflowerblue");
+                    $("#equipment-tab").css("background-color","white");
+                    $("#stats-tab").css("background-color","white");
+                });
+                $("#equipment-tab").on("click",function(){
+                    $("#journal").hide();
+                    $("#inventory-contents").hide();
+                    $("#equipment-contents").show();
+                    $("#stats-contents").hide();
+                    $("#journal-tab").css("background-color","white");
+                    $("#inventory-tab").css("background-color","white");
+                    $("#equipment-tab").css("background-color","cornflowerblue");
+                    $("#stats-tab").css("background-color","white");
+                });
+                $("#stats-tab").on("click",function(){
+                    $("#journal").hide();
+                    $("#inventory-contents").hide();
+                    $("#equipment-contents").hide();
+                    $("#stats-contents").show();
+                    $("#journal-tab").css("background-color","white");
+                    $("#inventory-tab").css("background-color","white");
+                    $("#equipment-tab").css("background-color","white");
+                    $("#stats-tab").css("background-color","cornflowerblue");
+                });
+            });
+
+            function gainHP (percent) {
+                extraHp = Math.ceil(char.hpTotal*percent);
+                if (char.hp + extraHp >= char.hpTotal) {
+                    char.hp = char.hpTotal;
+                } else {
+                    char.hp += extraHp;
+                }
+                updateMy("hp");
+                refreshBar(myhp);
+            }
+
+//            fupdate
+            function updateMy (stat) {
+                if (stat === "hp") {
+                    updateText("#player-hp",char.hp+"/"+char.hpTotal);
+                } else if (stat === "weight") {
+                    updateText("#player-weight",char.weight+"/"+char.weightTotal);
+                } else if (stat === "dist") {
+                    updateText("#player-dist",distToDestination - traveled+" ly");
+                } else if (stat === "targethp") {
+                    updateText("#target-hp",target.hp);
+                } else if (stat === "credits") {
+                    updateText(".player-credits",char.credits);
+                } else if (stat === "weapon") {
+                    updateText("#player-weapon",char.weapon);
+                } else if (stat === "ac") {
+                    updateText("#player-ac",char.ac);
+                } else if (stat === "lvl") {
+                    updateText("#player-level",char.lvl);
+                } else if (stat === "exp") {
+                    updateText("#player-exp",char.exp+"/"+expRequirements);
+                } else if (stat === "str") {
+                    updateText("#player-str",char.str);
+                } else if (stat === "dex") {
+                    updateText("#player-dex",char.dex);
+                } else if (stat === "con") {
+                    updateText("#player-con",char.con);
+                } else if (stat === "int") {
+                    updateText("#player-int",char.int);
+                } else if (stat === "name") {
+                    updateText("#player-name",char.name);
+                } else if (stat === "race") {
+                    updateText("#player-race",char.race);
+                } else if (stat === "class") {
+                    updateText("#player-class",char.class);
+                }
+            }
+
+            function printTreasure(obj) {
+                typeText("You found <span class="+obj.rarity+">"+obj.name+"</span>");
+            }
+
+            function hideMerchant() {
+                $(".merchant").hide();
+                store = [];
+            }
+            var firstNames = ["Meetho","Lorsab","Gilhar","Blathan","Korl","Flin","Jorb","Grol","Poltan"];
+            var lastNames = ["Lufor","Olimdet","Blorio","Flaaso","Wriven","Jorkan","Writho","Slo","Fivin","Slipe"];
+            var merchantImages = ["assets/images/store/merchants/store1.jpg"];
+
+            function generateMerchant(howManyItems) {
+                store = [];
+                $("#merchant-name").text(randomFromArray(firstNames)+" "+randomFromArray(lastNames));
+                $("#merchant-image").html("<img src='assets/images/store/merchants/merchant1.jpg'>");
+                $("#store-contents").text("");
+                $(".merchant").show();
+                for (i = 0; i < howManyItems; i++) {
+                    thisThing = generateItem();
+                    store.push(thisThing);
+                }
+                store.push({name:"Med Kit",type:"defensive",value:10,weight:2});
+                store.push({name:"Dehydrated Water",type:"drink",value:10,weight:2});
+                store.push({name:"Military Ration",type:"food",value:10,weight:2});
+                refreshInventory();
+                refreshStore();
+            }
+
+            function buyItem(index) {
+                obj = store[index];
+                if (char.credits >= obj.value) {
+                    if (char.weight + obj.weight > char.weightTotal) {
+                        typeText("You can't possibly carry any more!");
+                    } else {
+                        char.credits -= obj.value;
+                        char.weight += obj.weight;
+                        inventory.push(obj);
+                        typeText("You bought "+obj.name+" for "+obj.value+" credits.");
+                        updateMy("credits");
+                        updateMy("weight");
+                        if (obj.name === "Med Kit" || obj.name === "Dehydrated Water" || obj.name === "Military Ration") {
+                        } else {
+                            store.splice(index, 1);
+                        }
+                        refreshInventory();
+                        refreshStore();
+                    }
+                } else {
+                    typeText("You don't have enough credits!");
+                }
+            }
+//fnewchar
+            function newChar() {
+                $("#inventory-contents").hide();
+                $("#equipment-contents").hide();
+                $("#stats-contents").hide();
+                $("#camp").hide();
+                $("#journal-tab").css("background-color","cornflowerblue");
+                $("#market").show();
+
+//              var playerName = prompt("Please enter your name", "Sven");
+                $("body").css("background-image",randomFromArray(randomFromArray(stations).img));
+                var playerName = randomFromArray(firstNames)+" "+randomFromArray(lastNames);
+                races = ["Human","Lothean","Balamin"];
+                classes = ["Smuggler","Monk","Soldier"];
+                char["race"] = randomFromArray(races);
+                char["class"] = randomFromArray(classes);
+                updateMy("race");
+                updateMy("class");
+                updateMy("dist");
+                char["name"] = playerName;
+                char["lvl"] = 1;
+                refreshBar(myhp);
+                statsRollMax = 18;
+                statsRollMin = 6;
+                char["str"] = rollDie(statsRollMax,statsRollMin);
+                char["con"] = rollDie(statsRollMax,statsRollMin);
+                char["int"] = rollDie(statsRollMax,statsRollMin);
+                char["dex"] = rollDie(statsRollMax,statsRollMin);
+                char["strmod"] = generateModifier(char.str);
+                char["conmod"] = generateModifier(char.con);
+                char["intmod"] = generateModifier(char.int);
+                char["dexmod"] = generateModifier(char.dex);
+                char["ac"] = rollDie(18,12);
+                hp = rollDie(30,20);
+                char["hp"] = hp;
+                char["hpTotal"] = hp;
+                myhp["value"] = char.hp/char.hpTotal*100;
+                char["weight"] = 0;
+                char["weightTotal"] = char.str*10;
+                char["weapon"] = char.str;
+                char["exp"] = 0;
+                char["credits"] = rollDie(50,30);
+                updateMy("name");
+                updateMy("hp");
+                updateMy("ac");
+                updateMy("lvl");
+                updateMy("str");
+                updateMy("con");
+                updateMy("dex");
+                updateMy("int");
+                updateMy("exp");
+                updateMy("credits");
+                updateMy("weapon");
+                for (i = 0; i < rollDie(10)-1; i++) {
+                    item = generateItem("Junk");
+                    inventory.push(item);
+                    char.weight += item.weight;
+                }
+//                save
+                for (i = 0; i < 3; i++) {
+                    freeFood = randomFromArray(foodItem);
+                    freeItem = randomFromArray(itemItem);
+                    inventory.push(freeFood);
+                    inventory.push(freeItem);
+                    char.weight += freeFood.weight;
+                    char.weight += freeItem.weight;
+                }
+
+                updateMy("weight");
+                refreshInventory();
+                refreshEquipment();
+            }
+            function generateModifier (stat) {
+                return Math.floor(stat/2)-5;
+            }
+//frfneeds
+            function refreshAllNeeds() {
+                refreshBar(food);
+                refreshBar(drink);
+                refreshBar(sleep);
+            }
+//fbar
+            function refreshBar(barType) {
+                bar = "#"+barType.name+"-bar";
+                $(bar).css("width",barType.value+"%");
+                if (barType.name !== "dist") {
+                    if (barType.value > 50) {
+                        $(bar).removeClass("progress-bar-warning").removeClass("progress-bar-danger").addClass("progress-bar-success");
+                    } else if (barType.value <= 50 && barType.value > 20) {
+                        $(bar).removeClass("progress-bar-success").removeClass("progress-bar-danger").addClass("progress-bar-warning");
+                    } else if (barType.value <= 20 && barType.value > 0) {
+                        $(bar).removeClass("progress-bar-success").removeClass("progress-bar-warning").addClass("progress-bar-danger");
+                    }
+                }
+            }
+
+            function refreshEquipment() {
+                if (equipment.length === 0) {
+                    updateText("#equipment-contents","You have no items equipped.");
+                } else {
+                    updateText("#equipment-contents","");
+                    $.each(equipment, function(i, value) {
+                        if (value.slot === "Weapon" || value.type === "Apparel") {
+                            if (value.slot === "Weapon") {
+                                bonus = "Attack: "+value.attack;
+                            } else {
+                                bonus = "AC: "+value.ac;
+                            }
+                            typeText("<span class="+value.rarity+">"+value.name+" </span> | "+bonus+" Weight: "+value.weight+"  Cost: "+value.value+" <br/><span class='merchant-button' onclick='unequipItem("+i+")'>Unequip</span>","#equipment-contents");
+                        } else  {
+                            typeText("<span class="+value.rarity+">"+value.name+" </span> | Weight: "+value.weight+"  Cost: "+value.value+" <br/><span class='merchant-button' onclick='unequipItem("+i+")'>Unequip</span>","#equipment-contents");
+                        }
+                    });
+                }
+            }
+
+            function equipItem(i) {
+                if (i > -1) {
+                    slotsUsed = [];
+                    item = inventory[i];
+                    $.each(equipment, function(i, value) {
+                        slotsUsed.push(value.slot);
+                    });
+                    result = $.inArray(item.slot, slotsUsed);
+                    if (result === -1) {
+                        typeText("You equip "+item.name+".");
+                        equipment.push(item);
+                        if (item.slot === "Weapon") {
+                            char.weapon = item.attack+char.str;
+                            updateMy("weapon");
+                        } else if (item.type === "Apparel") {
+                            char.ac += item.ac;
+                            updateMy("ac");
+                        }
+                        inventory.splice(i, 1);
+                        // loop through equiped items, if slot is taken ask to replace. swap item to inventory
+                        // can only sell/destroy items in inventory
+                        // add unequip button in equipment section
+                        // possibly show avatar with highlighted items/rarity
+                        // add all appropriate stats/weight after equipping
+                        if (item.str) {
+                            char.str += item.str;
+                        }
+                    } else {
+                        typeText("You already have an item in that slot!");
+                    }
+                }
+                refreshInventory();
+                refreshEquipment();
+            }
+
+            function unequipItem(i) {
+                if (i > -1) {
+                    item = equipment[i];
+                    console.log(equipment[i]);
+                    typeText("You unequipped "+item.name+".");
+                    inventory.push(item);
+                    if (item.slot === "Weapon") {
+                        char.weapon = char.str;
+                        updateMy("weapon");
+                    } else if (item.type === "Apparel") {
+                        char.ac -= item.ac;
+                        updateMy("ac");
+                    }
+                    equipment.splice(i, 1);
+                }
+                refreshInventory();
+                refreshEquipment();
+            }
+
+            function refreshInventory() {
+                if ($(".merchant").is(":visible")) {
+                    updateText("#inventory-contents","");
+                    $.each(inventory, function(i, value) {
+                        if (value.type === "Ranged" || value.type === "Melee" || value.type === "Apparel") {
+                            if (value.slot === "Weapon") {
+//                                add dmg/bonuses
+                                bonus = "Attack: "+value.attack;
+                            } else {
+                                bonus = "AC: "+value.ac;
+//                                add ac/bonuses
+                            }
+                            typeText("<span class="+value.rarity+">"+value.name+"</span> | "+bonus+" Weight: "+value.weight+" Value: "+value.value+" <br/><span class='merchant-button' onclick='sellItem("+i+")'>Sell</span>"+" <span class='merchant-button' onclick='equipItem("+i+")'>Equip</span>","#inventory-contents");
+                        } else if (value.type === "food" || value.type === "drink" || value.type === "defensive" || value.type === "offensive") {
+                            typeText("<span class="+value.rarity+">"+value.name+"</span> | Weight: "+value.weight+" Value: "+value.value+" <br/><span class='merchant-button' onclick='sellItem("+i+")'>Sell</span>"+" <span class='merchant-button' onclick='useItem("+i+")'>Use</span>","#inventory-contents");
+                        } else {
+                            typeText("<span class="+value.rarity+">"+value.name+"</span> | Weight: "+value.weight+" Value: "+value.value+" <br/><span class='merchant-button' onclick='sellItem("+i+")'>Sell</span>","#inventory-contents");
+                        }
+                    });
+                } else {
+                    updateText("#inventory-contents","");
+                    $.each(inventory, function(i, value) {
+                        if (value.type === "Ranged" || value.type === "Melee" || value.type === "Apparel") {
+                            if (value.slot === "Weapon") {
+//                                add dmg/bonuses
+                                bonus = "Attack: "+value.attack;
+                            } else {
+                                bonus = "AC: "+value.ac;
+//                                add ac/bonuses
+                            }
+                            typeText("<span class="+value.rarity+">"+value.name+"</span> | "+bonus+" Weight: "+value.weight+" Value: "+value.value+" <br/><span class='merchant-button' onclick='tossItem("+i+")'>Destroy</span>"+" <span class='merchant-button' onclick='equipItem("+i+")'>Equip</span>","#inventory-contents");
+                        } else if (value.type === "food" || value.type === "drink" || value.type === "defensive" || value.type === "offensive") {
+                            typeText("<span class="+value.rarity+">"+value.name+"</span> | Weight: "+value.weight+" Value: "+value.value+" <br/><span class='merchant-button' onclick='tossItem("+i+")'>Destroy</span>"+" <span class='merchant-button' onclick='useItem("+i+")'>Use</span>","#inventory-contents");
+                        } else {
+                            typeText("<span class="+value.rarity+">"+value.name+"</span> | Weight: "+value.weight+" Value: "+value.value+" <br/><span class='merchant-button' onclick='tossItem("+i+")'>Destroy</span>","#inventory-contents");
+                        }
+                    });
+                }
+            }
+
+            function refreshStore() {
+                updateText("#store-contents","");
+                $.each(store, function(i, value) {
+                    if (value.slot === "Weapon" || value.type === "Apparel") {
+                        if (value.slot === "Weapon") {
+//                                add dmg/bonuses
+                            bonus = "Attack: "+value.attack;
+                        } else {
+                            bonus = "AC: "+value.ac;
+//                                add ac/bonuses
+                        }
+                        typeText("<span class="+value.rarity+">"+value.name+" </span> | "+bonus+" Weight: "+value.weight+" Cost: "+value.value+" <span class='merchant-button' onclick='buyItem("+i+")'>Buy</span>","#store-contents");
+                    } else {
+                        typeText("<span class="+value.rarity+">"+value.name+" </span> | Weight: "+value.weight+" Cost: "+value.value+" <span class='merchant-button' onclick='buyItem("+i+")'>Buy</span>","#store-contents");
+                    }
+                });
+            }
+
+            function useItem(i) {
+                item = inventory[i];
+                if (item.type === "food") {
+                    foodEffectiveness = 3;
+                    if (food.value === 100) {
+                        typeText("You are not hungry.");
+                    } else if (food.value + item.value*foodEffectiveness > 100) {
+                        food.value = 100;
+                        removeFromInventory();
+                    } else {
+                        food.value += item.value*foodEffectiveness;
+                        removeFromInventory();
+                    }
+                } else if (item.type === "drink") {
+                    drinkEffectiveness = 3;
+                    if (drink.value === 100) {
+                        typeText("You are not thirsty.");
+                    } else if (drink.value + item.value*drinkEffectiveness > 100) {
+                        drink.value = 100;
+                        removeFromInventory();
+                    } else {
+                        drink.value += item.value*drinkEffectiveness;
+                        removeFromInventory();
+                    }
+                } else if (item.type === "defensive") {
+//                    char.hp/char.hpTotal*100;
+                    if (char.hp/char.hpTotal === 1) {
+                        typeText("You are already full health!");
+                    } else if ((char.hp + item.value)/char.hpTotal > 1) {
+                        char.hp = char.hpTotal;
+                        myhp.value = 100;
+                        typeText("You are healed to full health!");
+                        removeFromInventory();
+                        updateMy("hp");
+                        refreshBar(myhp);
+                    } else {
+                        char.hp += item.value;
+                        typeText("You are healed for "+item.value+" health!");
+                        myhp.value = char.hp/char.hpTotal*100;
+                        removeFromInventory();
+                        updateMy("hp");
+                        refreshBar(myhp);
+                    }
+                } else if (item.type === "offensive") {
+                    if (target.hp) {
+                        damageRoll = rollDie(item.value,Math.ceil(item.value/2));
+                        if (target.hp - item.value <= 0) {
+                            targetKilled(item.value);
+                        } else {
+                            targetDamaged(item.value);
+                            setTimeout(function(){ monsterAttack(); }, 500);
+                        }
+                        removeFromInventory();
+                    } else {
+                        typeText("There is nothing to use that on.");
+                    }
+                }
+                function removeFromInventory() {
+                    char.weight -= item.weight;
+                    updateMy("weight");
+                    inventory.splice(i, 1);
+                    refreshInventory();
+                }
+                refreshAllNeeds();
+            }
+
+            function sellItem(i) {
+                if (i > -1) {
+                    item = inventory[i];
+                    sellPriceWeight = .75;
+                    sellPrice = Math.ceil(item.value*sellPriceWeight);
+                    typeText("You sold "+item.name+" for "+sellPrice+" credits.");
+                    store.push(item);
+                    inventory.splice(i, 1);
+                    char.credits += sellPrice;
+                    char.weight -= item.weight;
+                    updateMy("credits");
+                    updateMy("weight");
+                }
+                refreshInventory();
+                refreshStore();
+            }
+
+            function tossItem(i) {
+                if (i > -1) {
+                    inventory.splice(i, 1);
+                    char.weight -= item.weight;
+                    updateMy("weight");
+                }
+                refreshInventory();
+            }
+            function travel (distance) {
+                typeText("You traveled "+distance+" light years.");
+                traveled += distance;
+                dist.value = Math.floor(traveled/distToDestination*100);
+                $("#dist-bar").css("width",dist.value+"%");
+            }
+
+var stations = [
+    {name:"Space Station",img:["url('assets/images/station1.jpg')","url('assets/images/station2.jpg')","url('assets/images/station3.jpg')"]},
+    {name:"Outpost",img:["url('assets/images/outpost1.jpg')","url('assets/images/outpost2.jpg')"]},
+    {name:"Planetary Colony",img:["url('assets/images/colony1.jpg')","url('assets/images/colony2.jpg')"]}
+];
+//fevents
+            function randomEvent(number) {
+                if (number){
+                    roll = number;
+                } else {
+                    roll = rollDie(95);
+                }
+                if (roll > 0 && roll <= 25) {
+                    console.log("encounter");
+                    travel(rollDie(500,200));
+                    newTarget();
+                    $("#run").show();
+                    $("#attack").show();
+                    $(".encounter").show();
+                    $("#continue").hide();
+                    $("#camp").hide();
+                    hideMerchant();
+                    updateMy("targethp");
+                } else if (roll > 25 && roll <= 70) {
+                    console.log("nothing");
+                    travel(rollDie(1000,500));
+                    typeText("Nothing eventful happens.");
+                    // nothing happens 20%
+                } else if (roll > 70 && roll <= 80) {
+                    console.log("station");
+                    $("#market").show();
+                    travel(rollDie(500,200));
+                    randomStation = randomFromArray(stations);
+                    stationImage = randomFromArray(randomStation.img);
+                    typeText("You come across a "+randomStation.name+".");
+                    $("body").css("background-image",stationImage);
+                } else if (roll > 80 && roll <= 90) {
+                    console.log("treasure");
+                    travel(rollDie(500,200));
+                    treasureLoc = randomFromArray(treasureLocations);
+                    if (roll > 80 && roll <= 82) {
+                        randomEvent(1);
+                    } else if (roll > 82 && roll <= 84) {
+                        typeText(treasureLoc+" but you find no salvage.");
+                        updateExperience(rollDie(char.lvl*5,char.lvl*3));
+                    } else if (roll > 84 && roll <= 86) {
+                        item = generateItem();
+                        typeText(treasureLoc+" and you find "+item.name+"!");
+                        inventory.push(item);
+                        refreshInventory();
+                        updateExperience(rollDie(char.lvl*5,char.lvl*3));
+                    } else if (roll > 86 && roll <= 89) {
+                        credits = getCredits(rollDie(10+char.lvl*rollDie(3)));
+                        typeText(treasureLoc+" and you find "+credits+" credits!");
+                        updateExperience(rollDie(char.lvl*5,char.lvl*3));
+                    } else {
+                        credits = getCredits(rollDie(10+char.lvl*rollDie(3)));
+                        item = generateItem();
+                        inventory.push(item);
+                        refreshInventory();
+                        typeText(treasureLoc+" and you find "+item.name+" and "+credits+" credits!");
+                        updateExperience(rollDie(char.lvl*5,char.lvl*3));
+                    }
+                    // find treasure 10% (this will be randomized for value)
+                } else if (roll > 90 && roll <= 95) {
+                    console.log("weird thing");
+                    travel(rollDie(500,200));
+                    typeText("Something strange happens.");
+                    // find weird thing 10%
+                }
+                updateMy("dist");
+            }
+
+            function getCredits(amount) {
+                char.credits += amount;
+                updateMy("credits");
+                return amount;
+            }
+//            fnewtarget
+            function newTarget() {
+                targetType = randomFromArray(targets);
+                target["name"] = targetType.name;
+                target["type"] = targetType.type;
+                hp = rollDie(20+char.lvl,10+char.lvl);
+                target["hp"] = hp;
+                target["hpTotal"] = hp;
+                targethp["value"] = target.hp/target.hpTotal*100;
+                refreshBar(targethp);
+                target["ac"] = rollDie(20+char.lvl,10+char.lvl);
+                target["attack"] = rollDie(2+char.lvl,1+char.lvl);
+                target["rating"] = Math.floor(target.hp + target.ac + target.attack);
+                if (target.type === "humanoid") {
+                    target["credits"] = rollDie(Math.floor(target.rating*.2));
+                } else {
+                    target["credits"] = 0;
+                }
+                $("#target-name").text(target.name);
+                console.log(targetType.img);
+                $("#target-image").html("<img src='"+targetType.img+"'>");
+                typeText(target.name+" attacks!");
+//                todo: generate number of opponents
+                return target;
+            }
+
+//fgenitem
+            function generateItem(forceRarity) {
+                itemType = rollDie(100);
+                if (itemType <= 30) {
+                    newItem = getJunk();
+                    return newItem;
+                } else if (itemType > 30 && itemType <= 60) {
+                    newItem = randomFromArray(foodItem);
+                    return newItem;
+                } else if (itemType > 60 && itemType <= 73) {
+                    if (forceRarity) {
+                        newItem = getWeapon(forceRarity);
+                    } else {
+                        newItem = getWeapon();
+                    }
+                    return newItem;
+                } else if (itemType > 73 && itemType <= 83) {
+                    if (forceRarity) {
+                        newItem = getApparel(forceRarity);
+                    } else {
+                        newItem = getApparel();
+                    }
+                    return newItem;
+                } else {
+                    newItem = getItem();
+                    return newItem;
+                }
+            }
+
+            function getItem() {
+                return randomFromArray(itemItem);
+            }
+
+            function getApparel(forcedRarity) {
+                o = {};
+                if (forcedRarity) {
+                    rarity = generateRarity(forcedRarity);
+                } else {
+                    rarity = generateRarity();
+                }
+                o["rarity"] = rarity.name;
+                o["type"] = "Apparel";
+                o["slot"] = randomFromArray(apparelSubtype);
+                switch(o.slot) {
+                    case "Head":
+                        subtype = randomFromArray(headItem);
+                        break;
+                    case "Chest":
+                        subtype = randomFromArray(chestItem);
+                        break;
+                    case "Hands":
+                        subtype = randomFromArray(handsItem);
+                        break;
+                    case "Feet":
+                        subtype = randomFromArray(feetItem);
+                        break;
+                    case "Waist":
+                        subtype = randomFromArray(waistItem);
+                        break;
+                    default:
+                }
+                o["name"] = randomFromArray(apparelMaterial)+" "+subtype.name;
+                o["weight"] = subtype.weight;
+                if (rarity.name === "Rare" || rarity.name === "Epic" || rarity.name === "Legendary") {
+                    bonusWeight = getBonusWeight(rarity.name);
+                    bonusType = randomFromArray(bonuses);
+                    bonusAmt = getBonusWeight(rarity.name);
+                    o[bonusType] = bonusAmt;
+                    o["value"] = subtype.value*rarity.weight*bonusAmt;
+                } else {
+                    o["value"] = subtype.value*rarity.weight;
+                }
+                o["ac"] = char.lvl;
+
+                return o;
+            }
+
+
+            function getJunk() {
+                junk = {};
+                junknameandvalue = randomFromArray(junkItem);
+                junk["name"] = randomFromArray(junkCondition)+" "+junknameandvalue.name;
+                junk["value"] = junknameandvalue.value;
+                junk["weight"] = junknameandvalue.weight;
+                return junk;
+            }
+
+            function rich () {
+                char.credits = 10000;
+                updateMy("credits");
+            }
+
+            function getWeapon(forcedRarity) {
+                o = {};
+                if (forcedRarity) {
+                    rarity = generateRarity(forcedRarity);
+                } else {
+                    rarity = generateRarity();
+                }
+                o["rarity"] = rarity.name;
+                o["type"] = randomFromArray(weaponType);
+                if (o.type === "Melee") {
+                    subtype = randomFromArray(meleeWeaponSubtype);
+                    power = randomFromArray(meleeWeaponPower);
+                    getBonus();
+                } else {
+                    subtype = randomFromArray(rangedWeaponSubtype);
+                    power = randomFromArray(rangedWeaponPower);
+                    getBonus();
+                }
+                o["slot"] = "Weapon";
+                o["subtype"] = subtype.subtype;
+                o["name"] = power+" "+subtype.subtype;
+                o["speed"] = subtype.speed;
+                o["weight"] = subtype.weight;
+                function getBonus(){
+                    if (rarity.name === "Rare" || rarity.name === "Epic" || rarity.name === "Legendary") {
+                        bonusWeight = getBonusWeight(rarity.name);
+                        bonusType = randomFromArray(bonuses);
+                        bonusAmt = getBonusWeight(rarity.name);
+                        o[bonusType] = bonusAmt;
+                        o["value"] = subtype.value*rarity.weight*bonusAmt;
+                        o["attack"] = subtype.attack*bonusAmt;
+                    } else {
+                        o["value"] = subtype.value+rarity.weight;
+                        o["attack"] = subtype.attack;
+                    }
+                }
+                return o;
+            }
+
+            function generateRarity(forcedRarity) {
+//                junk30, common30, uncommon20, rare10, epic7, legendary3
+                if (forcedRarity) {
+                    rarity_roll = forcedRarity;
+                } else {
+                    rarity_roll = rollDie(100);
+                }
+                if (rarity_roll < 31 || rarity_roll == "Junk"){
+                    return {name:"Junk",weight:1};
+                } else if (rarity_roll < 61 || rarity_roll == "Common") {
+                    return {name:"Common",weight:2};
+                } else if (rarity_roll < 81 || rarity_roll == "Uncommon") {
+                    return {name:"Uncommon",weight:3};
+                } else if (rarity_roll < 91 || rarity_roll == "Rare") {
+                    return {name:"Rare",weight:4};
+                } else if (rarity_roll < 97 || rarity_roll == "Epic") {
+                    return {name:"Epic",weight:5};
+                } else if (rarity_roll >= 97 || rarity_roll == "Legendary") {
+                    return {name:"Legendary",weight:6};
+                }
+            }
+
+            function getBonusWeight(rarity) {
+                if (rarity === "Rare") {
+                    bonusWeight = 1.5;
+                } else if (rarity === "Epic") {
+                    bonusWeight = 2;
+                } else if (rarity === "Legendary") {
+                    bonusWeight = 2.5;
+                }
+                return bonusWeight;
+            }
+
+            function attackAttempt() {
+//              fattack
+                food.value -= 1;
+                drink.value -= 1;
+                sleep.value -= 2;
+                refreshAllNeeds();
+                if (food.value <= 0 || drink.value <= 0 || sleep.value <= 0) {
+                    checkNeeds();
+                } else {
+                    hit = rollDie(20) + char.dex;
+                    if (hit >= target.ac) {
+//                  hit
+                        attack = ("weapon" in equipment) ? rollDie(equipment.weapon.atk) : rollDie(char.str);
+                        if (target.hp - attack <= 0) {
+                            targetKilled();
+//                  enemy still alive
+                        } else {
+                            targetDamaged(attack);
+                            monsterAttack();
+                        }
+                        $("#target-hp").text(target.hp);
+                    } else {
+//                  miss
+                        writeJournalMiss("monster");
+                        monsterAttack();
+                    }
+                }
+            }
+
+            function checkNeeds() {
+                if (food.value <= 0) {
+                    alert("You died of hunger.");
+                    location.reload();
+                } else if (drink.value <= 0) {
+                    alert("You died of thirst.");
+                    location.reload();
+                } else if (sleep.value <= 0) {
+                    alert("You passed out. Then a dude killed you and took your stuff.");
+                    location.reload();
+                }
+            }
+            function targetDamaged(attack) {
+                typeText("You hit the target for "+attack+" damage!");
+                target.hp -= attack;
+                targethp["value"] = target.hp/target.hpTotal*100;
+                refreshBar(targethp);
+                $("#target-hp").text(target.hp);
+            }
+
+            function targetKilled() {
+                targethp["value"] = 0;
+                refreshBar(targethp);
+                target.hp = 0;
+                updateMy("targethp");
+                typeText(target.name+" has been destroyed.");
+                $("#continue").show();
+                $("#camp").show();
+                $("#run").hide();
+                $("#attack").hide();
+                updateExperience();
+                for (i = 0; i < rollDie(4)-1; i++) {
+                    item = generateItem();
+                    inventory.push(item);
+                    char.weight += item.weight;
+                    typeText("You found "+item.name);
+                    refreshInventory();
+                }
+                if (target.credits != 0) {
+                    char.credits += target.credits;
+                    writeJournalTreasure(target.credits +" credits!");
+                    updateMy("credits");
+                }
+                $("#target-image").html("<img src='assets/images/skull.png' id='death'>");
+            }
+//fmonster
+            function monsterAttack () {
+                hit = rollDie(20)+char.lvl;
+                if (hit >= char.ac) {
+//                  hit
+                    attack = rollDie(target.attack);
+                    if (char.hp - attack <= 0) {
+                        char.hp = 0;
+                        updateMy("hp");
+                        refreshBar(myhp);
+                        alert("You have been killed by "+target.name+"!");
+                        location.reload();
+//                  character still alive
+                    } else {
+                        writeJournalHit("me");
+                        char.hp -= attack;
+                        myhp["value"] = char.hp/char.hpTotal*100;
+                        refreshBar(myhp);
+                    }
+                    $("#player-hp").text(char.hp+"/"+char.hpTotal);
+                } else {
+//                  miss
+                    writeJournalMiss("me");
+                }
+            }
+
+            function updateExperience(optionalAmount) {
+                if (optionalAmount) {
+                    char.exp += optionalAmount;
+                    typeText("You gained "+optionalAmount+" experience!");
+                } else {
+                    char.exp += target.rating;
+                    typeText("You gained "+target.rating+" experience!");
+                }
+                if (char.exp >= expRequirements) {
+                    expRequirements *= 3;
+                    char.lvl ++;
+                    updateMy("lvl");
+                    alert("Congratulations! You've reached level "+char.lvl+"!");
+                    newHp = Math.ceil(char.hpTotal*.2);
+                    char.hpTotal += newHp;
+                    char.hp = char.hpTotal;
+                    myhp.value = 100;
+                    refreshBar(myhp);
+                    updateMy("hp");
+                }
+                updateMy("exp");
+            }
+
+            function objectValueExists(propertyname, objectname) {
+                if(propertyname in objectname) {
+                    console.log("yes, i have "+propertyname);
+                } else {
+                    console.log("nope, i don't have "+propertyname);
+                }
+            }
+
+            function randomFromArray(arrayName) {
+                return arrayName[Math.floor(Math.random() * arrayName.length)];
+            }
+            function rollDie(max,min) {
+                if (min) {
+                    return Math.floor(Math.random()*(max-min+1)+min);
+                } else {
+                    return (Math.floor(Math.random()*max)+1);
+                }
+            }
+            function updateText(selector, text) {
+                $(selector).text(text);
+            }
+            function writeJournalHit(targetHit) {
+                if (targetHit === "monster") {
+                    typeText("You hit "+target.name+" for <span class='redtext'>"+attack+" damage! </span>");
+                }
+                else {
+                    typeText(target.name+" hit you for <span class='redtext'>"+attack+" damage! </span>");
+                }
+            }
+            function writeJournalMiss(targetMissed) {
+                if (targetMissed === "monster") {
+                    typeText("You missed!");
+                }
+                else {
+                    typeText(target.name+" missed you!");
+                }
+            }
+            function writeJournalTreasure(text) {
+                typeText("You found <span class='treasuretext'>"+text+"</span>!");
+            }
+
+            function typeText(text,elem,delay){
+                if(!elem){
+                    elem = $("#journal");
+                }
+                $(elem).prepend(text+"<br/>");
+//                if(!delay){
+//                    delay = 30;
+//                }
+//                if(text.length >0){
+//                    //append first character
+//                    elem.append(text[0]);
+//                    setTimeout(
+//                            function(){
+//                                //Slice text by 1 character and call function again
+//                                typeText(text.slice(1),elem,delay);
+//                            },delay
+//                    );
+//                } else {
+//                    elem.append("<br/>");
+//                }
+            }
+        </script>
+    </body>
+</html>
